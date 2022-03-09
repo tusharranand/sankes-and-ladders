@@ -6,45 +6,56 @@ namespace snakes_ladders
     {
         public int Roll = 0;
         public int Current_Place = 0;
+        public int Last_Place = 0;
         public const int LADDER = 1;
         public const int SNAKE = 2;
         public const int NO_PLAY = 0;
 
-        static int Dice()
+        public int Dice()
         {
             return new Random().Next(1, 7);
         }
 
-        static int Check()
+        public int Check()
         {
             return new Random().Next(0, 3);
         }
 
         public void Play()
         {
-            int Roll = Dice();
-            Console.WriteLine("Dice rolled a " + Roll);
-            switch (Check())
+            while (Current_Place < 100)
             {
-                case LADDER: 
-                    Current_Place = Current_Place + Roll;
-                    Console.WriteLine("Player climbed a Ladder");
-                    break;
-                case SNAKE: 
-                    Current_Place = Current_Place - Roll;
-                    Console.WriteLine("Player was bit by a Snake");
-                    break;
-                case NO_PLAY:
-                    Console.WriteLine("Player couldn't move");
-                    break;
+                Last_Place = Current_Place;
+                int Roll = Dice();
+                switch (Check())
+                {
+                    case LADDER:
+                        Current_Place = Current_Place + Roll;
+                        break;
+                    case SNAKE:
+                        Current_Place = Current_Place - Roll;
+                        if (Current_Place <= 0)
+                            {
+                                Current_Place = 0;
+                            }
+                        break;
+                    case NO_PLAY:
+                        break;
+                }
+                if (Current_Place > 100)
+                {
+                    Current_Place = Last_Place;
+                }
+                Console.WriteLine("Current Position of player is: {0} \n", Current_Place);
             }
-            Console.WriteLine("Current Position of player is: {0} \n", Current_Place);
+
+            Console.WriteLine("The player reached 100th position.");
         }
 
         static void Main(string[] args)
         {
             Console.WriteLine("Snake and Ladder game played with single player at start position 0");
-            Console.WriteLine("Current Position of player is: 0");
+            Console.WriteLine("Current Position of player is: 0 \n");
             Simulation start = new Simulation();
             start.Play();
         }
